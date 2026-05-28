@@ -10,13 +10,10 @@ abstract class RouteNames {
   static const analytics = 'analytics';
   static const registerWait = 'registerWait';
   static const registerWelcome = 'registerWelcome';
-  static const ocr = 'ocr';
-  static const ocrPreview = 'ocr-preview';
   static const transaction = 'transaction';
   static const profile = 'profile';
   static const profileEdit = 'profileEdit';
   static const profileEditFullname = 'profileEditFullname';
-  static const chatAdvisor = 'chat-advisor';
   static const transactionStruct = 'transactionStruct';
   static const transactionDetail = 'transactionDetail';
   static const transactionSuccess = 'transactionSuccess';

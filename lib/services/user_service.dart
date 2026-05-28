@@ -9,7 +9,7 @@ class UserService {
       final prefs = await SharedPreferences.getInstance();
       final dbService = LocalDatabaseService();
       
-      final savings = prefs.getInt('current_savings') ?? 5000000;
+      final savings = prefs.getInt('current_savings') ?? 0;
       final debt = prefs.getInt('debt') ?? 0;
       final goals = prefs.getString('financial_goals') ?? 'Berinvestasi untuk masa depan dan menyiapkan rumah impian';
       final risk = prefs.getString('risk_management') ?? 'Rendah';

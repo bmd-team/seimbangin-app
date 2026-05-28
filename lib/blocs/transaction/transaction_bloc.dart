@@ -7,8 +7,6 @@ import 'package:seimbangin_app/services/transaction/transaction_service.dart';
 part 'transaction_event.dart';
 part 'transaction_state.dart';
 
-const int _HISTORY_LIMIT = 15;
-
 class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
   final TransactionService transactionService;
 
@@ -60,44 +58,19 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     }
   }
 
-  /// Handler untuk mengambil seluruh riwayat transaksi dengan lazy loading (untuk halaman histori).
+  /// Handler untuk mengambil seluruh riwayat transaksi (tanpa pagination).
   Future<void> _onFetchHistory(
       FetchHistoryTransactions event, Emitter<TransactionState> emit) async {
-    final currentState = state;
-
-    if (currentState is TransactionLoadSuccess &&
-        currentState.hasReachedMax &&
-        !event.isRefresh) {
-      return;
-    }
-
     try {
-      TransactionLoadSuccess baseState;
-
-      if (event.isRefresh || currentState is! TransactionLoadSuccess) {
-        emit(TransactionLoading("Loading history..."));
-
-        baseState = TransactionLoadSuccess(
-            recentTransactions: currentState is TransactionLoadSuccess
-                ? currentState.recentTransactions
-                : []);
-      } else {
-        baseState = currentState;
-      }
-
-      final nextPage =
-          (baseState.historicalTransactions.length ~/ _HISTORY_LIMIT) + 1;
-
-      final response = await transactionService.getTransaction(
-          limit: _HISTORY_LIMIT, page: nextPage);
-
-      final newTransactions = event.isRefresh
-          ? response.data
-          : baseState.historicalTransactions + response.data;
-
-      emit(baseState.copyWith(
-        historicalTransactions: newTransactions,
-        hasReachedMax: !response.meta!.hasNextPage,
+      final prevRecentTx = state is TransactionLoadSuccess
+          ? (state as TransactionLoadSuccess).recentTransactions
+          : <TransactionData>[];
+      emit(TransactionLoading("Loading history..."));
+      final response = await transactionService.getHistoryTransactions();
+      emit(TransactionLoadSuccess(
+        recentTransactions: prevRecentTx,
+        historicalTransactions: response.data,
+        hasReachedMax: true,
       ));
     } catch (e) {
       emit(TransactionFailure("Failed to load history: $e"));

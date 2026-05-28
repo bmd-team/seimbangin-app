@@ -40,7 +40,7 @@ class _MainPageState extends State<MainPage> {
           screen: const AnalyticsPage(),
           item: ItemConfig(
             icon: Icon(Icons.bar_chart_rounded, size: 24.r),
-            title: "Chart",
+            title: "Insight",
             textStyle: context.text.blackTextStyle
                 .copyWith(fontSize: 12.sp, fontWeight: FontWeight.w600),
             activeForegroundColor: context.color.primaryColor,

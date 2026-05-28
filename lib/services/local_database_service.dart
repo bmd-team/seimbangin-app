@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -18,7 +20,7 @@ class LocalDatabaseService {
     String path = join(await getDatabasesPath(), 'seimbangin_local.db');
     return await openDatabase(
       path,
-      version: 2, // Upgraded version to include categories
+      version: 3, // Upgraded version to include categories & items_json
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
@@ -33,7 +35,8 @@ class LocalDatabaseService {
         type TEXT,
         category TEXT,
         date TEXT,
-        notes TEXT
+        notes TEXT,
+        items_json TEXT
       )
     ''');
 
@@ -60,6 +63,9 @@ class LocalDatabaseService {
       ''');
       await _insertDefaultCategories(db);
     }
+    if (oldVersion < 3) {
+      await db.execute('ALTER TABLE transactions ADD COLUMN items_json TEXT');
+    }
   }
 
   Future<void> _insertDefaultCategories(Database db) async {
@@ -82,8 +88,12 @@ class LocalDatabaseService {
 
   // --- Transactions Operations --- //
 
-  Future<int> insertTransaction(Map<String, dynamic> row) async {
+  Future<int> insertTransaction(Map<String, dynamic> row,
+      {List<Map<String, dynamic>>? items}) async {
     Database db = await database;
+    if (items != null) {
+      row['items_json'] = jsonEncode(items);
+    }
     return await db.insert('transactions', row);
   }
 

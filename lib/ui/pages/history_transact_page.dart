@@ -18,48 +18,18 @@ class HistoryTransactPage extends StatefulWidget {
 }
 
 class _HistoryTransactPageState extends State<HistoryTransactPage> {
-  final _scrollController = ScrollController();
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_onScroll);
-
-    final currentState = context.read<TransactionBloc>().state;
-    if (currentState is! TransactionLoadSuccess ||
-        currentState.historicalTransactions.isEmpty) {
-      context.read<TransactionBloc>().add(FetchHistoryTransactions());
-    }
-  }
-
-  @override
-  void dispose() {
-    _scrollController
-      ..removeListener(_onScroll)
-      ..dispose();
-    super.dispose();
-  }
-
-  void _onScroll() {
-    if (_isBottom) {
-      final currentState = context.read<TransactionBloc>().state;
-      if (currentState is TransactionLoadSuccess &&
-          !currentState.hasReachedMax) {
-        context.read<TransactionBloc>().add(FetchHistoryTransactions());
-      }
-    }
-  }
-
-  bool get _isBottom {
-    if (!_scrollController.hasClients) return false;
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.offset;
-    return currentScroll >= (maxScroll * 0.9);
+    context.read<TransactionBloc>().add(FetchHistoryTransactions(isRefresh: true));
   }
 
   Future<void> _onRefresh() async {
     context
         .read<TransactionBloc>()
         .add(FetchHistoryTransactions(isRefresh: true));
+    await context.read<TransactionBloc>().stream.firstWhere(
+        (state) => state is TransactionLoadSuccess || state is TransactionFailure);
   }
 
   Map<String, List<TransactionData>> _groupTransactionsByMonth(
@@ -81,21 +51,26 @@ class _HistoryTransactPageState extends State<HistoryTransactPage> {
   (Color, String) _getCategoryUIData(String category) {
     switch (category.toLowerCase()) {
       case 'salary':
+      case 'gaji':
         return (context.color.buttonSalaryColor, 'assets/ic_salary.png');
       case 'freelance':
         return (context.color.buttonFreelanceColor, 'assets/ic_freelance.png');
       case 'bonus':
+      case 'hadiah':
         return (context.color.buttonBonusColor, 'assets/ic_bonus.png');
       case 'gift':
         return (context.color.buttonBonusColor, 'assets/ic_gift.png');
       case 'parent':
         return (context.color.buttonParentColor, 'assets/ic_parents.png');
       case 'food':
+      case 'makan':
         return (context.color.buttonFoodColor, 'assets/ic_food.png');
       case 'transportation':
       case 'transport':
+      case 'transportasi':
         return (context.color.buttonTransportationColor, 'assets/ic_transportation.png');
       case 'shopping':
+      case 'belanja':
         return (context.color.buttonShoppingColor, 'assets/ic_shopping.png');
       case 'health':
         return (context.color.buttonHealthColor, 'assets/ic_health.png');
@@ -105,6 +80,9 @@ class _HistoryTransactPageState extends State<HistoryTransactPage> {
         return (context.color.buttonHousingColor, 'assets/ic_housing.png');
       case 'internet':
         return (context.color.buttonInternetColor, 'assets/ic_internet.png');
+      case 'lainnya':
+      case 'others':
+        return (context.color.backgroundGreyColor, 'assets/ic_bonus.png');
       default:
         return (context.color.buttonInternetColor, 'assets/ic_bonus.png');
     }
@@ -113,10 +91,10 @@ class _HistoryTransactPageState extends State<HistoryTransactPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: context.color.backgroundWhiteColor,
+      backgroundColor: context.color.backgroundGreyColor,
       appBar: AppBar(
         scrolledUnderElevation: 0,
-        backgroundColor: context.color.backgroundWhiteColor,
+        backgroundColor: context.color.backgroundGreyColor,
         elevation: 0,
         automaticallyImplyLeading: false,
         leadingWidth: 70.w,
@@ -147,44 +125,18 @@ class _HistoryTransactPageState extends State<HistoryTransactPage> {
           if (state.historicalTransactions.isEmpty) {
             return RefreshIndicator(
               onRefresh: _onRefresh,
-              child: CustomScrollView(
+              child: ListView(
                 physics: const AlwaysScrollableScrollPhysics(),
-                slivers: [
-                  SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(24).r,
-                            decoration: BoxDecoration(
-                              color: context.color.backgroundGreyColor,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(Icons.receipt_long_rounded,
-                                size: 64.r, color: context.color.textSecondaryColor),
-                          ),
-                          SizedBox(height: 24.h),
-                          Text(
-                            'Belum Ada Transaksi',
-                            style: context.text.blackTextStyle.copyWith(
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 8.h),
-                          Text(
-                            'Transaksi yang Anda buat\nakan muncul di sini.',
-                            textAlign: TextAlign.center,
-                            style: context.text.greyTextStyle.copyWith(
-                              fontSize: 14.sp,
-                              height: 1.5,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                padding: EdgeInsets.fromLTRB(20.w, 24.h, 20.w, 100.h),
+                children: [
+                  RecentTransactionCard(
+                    backgroundColor: context.color.backgroundGreyColor,
+                    icon: Icon(Icons.receipt_long_rounded,
+                        size: 30.r, color: context.color.textSecondaryColor),
+                    title: "Belum ada transaksi",
+                    subtitle: "Transaksi yang Anda buat akan muncul di sini.",
+                    amount: "",
+                    amountColor: context.color.textSecondaryColor,
                   ),
                 ],
               ),
@@ -198,20 +150,10 @@ class _HistoryTransactPageState extends State<HistoryTransactPage> {
           return RefreshIndicator(
             onRefresh: _onRefresh,
             child: ListView.builder(
-              controller: _scrollController,
               physics: const AlwaysScrollableScrollPhysics(),
               padding: EdgeInsets.fromLTRB(20.w, 24.h, 20.w, 100.h),
-              itemCount: groupKeys.length + (state.hasReachedMax ? 0 : 1),
+              itemCount: groupKeys.length,
               itemBuilder: (context, index) {
-                // Tampilkan loading spinner di akhir list jika masih ada halaman
-                if (index == groupKeys.length) {
-                  return const Center(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 32.0),
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
-                }
 
                 final monthKey = groupKeys[index];
                 final transactionsInMonth = groupedTransactions[monthKey] ?? [];
@@ -230,13 +172,13 @@ class _HistoryTransactPageState extends State<HistoryTransactPage> {
                         ),
                       ),
                     ),
-                    ...transactionsInMonth.map((transaction) {
-                      final total = int.tryParse(transaction.amount) ?? 0;
+                      ...transactionsInMonth.map((transaction) {
+                      final total = double.tryParse(transaction.amount)?.toInt() ?? 0;
                       final prefix = transaction.type == 0 ? '+' : '-';
                       final amountColor = transaction.type == 0
                           ? context.color.textGreenColor
                           : context.color.textWarningColor;
-                      final date = DateFormat('dd MMMM yyyy (hh:mm a)', 'id_ID')
+                      final date = DateFormat('d MMM yyyy • HH:mm', 'id_ID')
                           .format(
                               DateTime.parse(transaction.createdAt!).toLocal());
 

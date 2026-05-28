@@ -69,6 +69,46 @@ class _TransactionStructPageState extends State<TransactionStructPage> {
     _overlayEntry = null;
   }
 
+  (Color, String) _getCategoryUIData(String category) {
+    switch (category.toLowerCase()) {
+      case 'salary':
+      case 'gaji':
+        return (context.color.buttonSalaryColor, 'assets/ic_salary.png');
+      case 'freelance':
+        return (context.color.buttonFreelanceColor, 'assets/ic_freelance.png');
+      case 'bonus':
+      case 'hadiah':
+        return (context.color.buttonBonusColor, 'assets/ic_bonus.png');
+      case 'gift':
+        return (context.color.buttonBonusColor, 'assets/ic_gift.png');
+      case 'parent':
+        return (context.color.buttonParentColor, 'assets/ic_parents.png');
+      case 'food':
+      case 'makan':
+        return (context.color.buttonFoodColor, 'assets/ic_food.png');
+      case 'transportation':
+      case 'transport':
+      case 'transportasi':
+        return (context.color.buttonTransportationColor, 'assets/ic_transportation.png');
+      case 'shopping':
+      case 'belanja':
+        return (context.color.buttonShoppingColor, 'assets/ic_shopping.png');
+      case 'health':
+        return (context.color.buttonHealthColor, 'assets/ic_health.png');
+      case 'education':
+        return (context.color.buttonEducationColor, 'assets/ic_education.png');
+      case 'housing':
+        return (context.color.buttonHousingColor, 'assets/ic_housing.png');
+      case 'internet':
+        return (context.color.buttonInternetColor, 'assets/ic_internet.png');
+      case 'lainnya':
+      case 'others':
+        return (context.color.backgroundGreyColor, 'assets/ic_bonus.png');
+      default:
+        return (context.color.buttonInternetColor, 'assets/ic_bonus.png');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final previewData =
@@ -267,23 +307,53 @@ class _TransactionStructPageState extends State<TransactionStructPage> {
                           separatorBuilder: (context, index) => const Divider(),
                           itemBuilder: (context, index) {
                             final item = previewData.items[index];
-                            return ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              title: Text(
-                                item.itemName,
-                                style: context.text.blackTextStyle.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 12.sp,
-                                ),
-                              ),
-                              trailing: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisSize: MainAxisSize.min,
+                            final categoryForIcon = item.category.isNotEmpty
+                                ? item.category
+                                : 'others';
+                            final categoryUI =
+                                _getCategoryUIData(categoryForIcon);
+                            final Color bgColor = categoryUI.$1;
+                            final String iconPath = categoryUI.$2;
+                            return Padding(
+                              padding: EdgeInsets.symmetric(vertical: 4.r),
+                              child: Row(
                                 children: [
-                                  Text(
-                                    'Qty: ${item.quantity}',
-                                    style: context.text.greyTextStyle.copyWith(
-                                      fontSize: 12.sp,
+                                  Container(
+                                    width: 44.r,
+                                    height: 44.r,
+                                    decoration: BoxDecoration(
+                                      color: bgColor,
+                                      borderRadius:
+                                          BorderRadius.circular(12).r,
+                                    ),
+                                    child: Center(
+                                      child: Image.asset(iconPath,
+                                          width: 22.r, height: 22.r),
+                                    ),
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          item.itemName,
+                                          style: context.text.blackTextStyle
+                                              .copyWith(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 12.sp,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Qty: ${item.quantity}',
+                                          style: context.text.greyTextStyle
+                                              .copyWith(
+                                            fontSize: 12.sp,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   Text(

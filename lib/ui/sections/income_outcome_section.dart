@@ -95,17 +95,10 @@ class _IncomeOutcomeSectionState extends State<IncomeOutcomeSection> {
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24.r),
-              gradient: LinearGradient(
-                colors: [
-                  context.color.gradientBlueStartColor,
-                  context.color.gradientBlueEndColor,
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+              color: context.color.primaryColor,
               boxShadow: [
                 BoxShadow(
-                  color: context.color.gradientBlueStartColor.withValues(alpha: 0.3),
+                  color: context.color.primaryColor.withValues(alpha: 0.3),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),

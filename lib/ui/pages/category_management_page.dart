@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:seimbangin_app/services/local_database_service.dart';
 import 'package:seimbangin_app/shared/theme/theme.dart';
 
-
 class CategoryManagementPage extends StatefulWidget {
   const CategoryManagementPage({super.key});
 
@@ -16,7 +15,7 @@ class _CategoryManagementPageState extends State<CategoryManagementPage>
     with SingleTickerProviderStateMixin {
   final LocalDatabaseService _dbService = LocalDatabaseService();
   late TabController _tabController;
-  
+
   List<Map<String, dynamic>> _incomeCategories = [];
   List<Map<String, dynamic>> _outcomeCategories = [];
   bool _isLoading = true;
@@ -32,7 +31,7 @@ class _CategoryManagementPageState extends State<CategoryManagementPage>
     setState(() => _isLoading = true);
     final income = await _dbService.getCategories('income');
     final outcome = await _dbService.getCategories('outcome');
-    
+
     if (mounted) {
       setState(() {
         _incomeCategories = income;
@@ -76,132 +75,135 @@ class _CategoryManagementPageState extends State<CategoryManagementPage>
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setModalState) {
-          return Container(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom,
-              left: 24.w,
-              right: 24.w,
-              top: 24.h,
-            ),
-            decoration: BoxDecoration(
-              color: context.color.backgroundWhiteColor,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Tambah Kategori ${type == 'income' ? 'Pemasukan' : 'Pengeluaran'}',
-                      style: context.text.blackTextStyle.copyWith(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
+      builder: (context) => StatefulBuilder(builder: (context, setModalState) {
+        return Container(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            left: 24.w,
+            right: 24.w,
+            top: 24.h,
+          ),
+          decoration: BoxDecoration(
+            color: context.color.backgroundWhiteColor,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Tambah Kategori ${type == 'income' ? 'Pemasukan' : 'Pengeluaran'}',
+                    style: context.text.blackTextStyle.copyWith(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w600,
                     ),
-                    IconButton(
-                      icon: Icon(Icons.close, color: context.color.textSecondaryColor),
-                      onPressed: () => context.pop(),
-                    ),
-                  ],
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.close,
+                        color: context.color.textSecondaryColor),
+                    onPressed: () => context.pop(),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16.h),
+              TextFormField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  labelText: 'Nama Kategori',
+                  hintText: 'Misal: Asuransi',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
                 ),
-                SizedBox(height: 16.h),
-                TextFormField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    labelText: 'Nama Kategori',
-                    hintText: 'Misal: Asuransi',
-                    border: OutlineInputBorder(
+              ),
+              SizedBox(height: 16.h),
+              Text(
+                'Pilih Ikon',
+                style: context.text.blackTextStyle.copyWith(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              SizedBox(height: 8.h),
+              SizedBox(
+                height: 200.h,
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 5,
+                    crossAxisSpacing: 10.w,
+                    mainAxisSpacing: 10.h,
+                  ),
+                  itemCount: icons.length,
+                  itemBuilder: (context, index) {
+                    final icon = icons[index];
+                    final isSelected = selectedIconCode == icon.codePoint;
+                    return GestureDetector(
+                      onTap: () {
+                        setModalState(() {
+                          selectedIconCode = icon.codePoint;
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? context.color.primaryColor
+                              : context.color.backgroundGreyColor,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          icon,
+                          color: isSelected
+                              ? Colors.white
+                              : context.color.textSecondaryColor,
+                          size: 24.r,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              SizedBox(height: 24.h),
+              SizedBox(
+                width: double.infinity,
+                height: 50.h,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: context.color.primaryColor,
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16.r),
                     ),
                   ),
-                ),
-                SizedBox(height: 16.h),
-                Text(
-                  'Pilih Ikon',
-                  style: context.text.blackTextStyle.copyWith(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(height: 8.h),
-                SizedBox(
-                  height: 200.h,
-                  child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 5,
-                      crossAxisSpacing: 10.w,
-                      mainAxisSpacing: 10.h,
-                    ),
-                    itemCount: icons.length,
-                    itemBuilder: (context, index) {
-                      final icon = icons[index];
-                      final isSelected = selectedIconCode == icon.codePoint;
-                      return GestureDetector(
-                        onTap: () {
-                          setModalState(() {
-                            selectedIconCode = icon.codePoint;
-                          });
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: isSelected ? context.color.primaryColor : context.color.backgroundGreyColor,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            icon,
-                            color: isSelected ? Colors.white : context.color.textSecondaryColor,
-                            size: 24.r,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                SizedBox(height: 24.h),
-                SizedBox(
-                  width: double.infinity,
-                  height: 50.h,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: context.color.primaryColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.r),
-                      ),
-                    ),
-                    onPressed: () async {
-                      if (nameController.text.trim().isEmpty) return;
-                      // Capture the pop action before the async gap
-                      final popModal = context.pop;
+                  onPressed: () async {
+                    if (nameController.text.trim().isEmpty) return;
+                    // Capture the pop action before the async gap
+                    final popModal = context.pop;
 
-                      await _dbService.insertCategory({
-                        'name': nameController.text.trim(),
-                        'type': type,
-                        'icon_code': selectedIconCode,
-                      });
+                    await _dbService.insertCategory({
+                      'name': nameController.text.trim(),
+                      'type': type,
+                      'icon_code': selectedIconCode,
+                    });
 
-                      popModal();
-                      _loadCategories();
-                    },
-                    child: Text(
-                      'Simpan',
-                      style: context.text.whiteTextStyle.copyWith(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    popModal();
+                    _loadCategories();
+                  },
+                  child: Text(
+                    'Simpan',
+                    style: context.text.whiteTextStyle.copyWith(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
-                SizedBox(height: 32.h),
-              ],
-            ),
-          );
-        }
-      ),
+              ),
+              SizedBox(height: 32.h),
+            ],
+          ),
+        );
+      }),
     );
   }
 
@@ -209,7 +211,7 @@ class _CategoryManagementPageState extends State<CategoryManagementPage>
     if (_isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
-    
+
     if (categories.isEmpty) {
       return Center(
         child: Text(
@@ -224,8 +226,9 @@ class _CategoryManagementPageState extends State<CategoryManagementPage>
       itemCount: categories.length,
       itemBuilder: (context, index) {
         final cat = categories[index];
-        final iconData = IconData(cat['icon_code'] as int, fontFamily: 'MaterialIcons');
-        
+        final iconData =
+            IconData(cat['icon_code'] as int, fontFamily: 'MaterialIcons');
+
         return Container(
           margin: EdgeInsets.only(bottom: 12.h),
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
@@ -242,7 +245,8 @@ class _CategoryManagementPageState extends State<CategoryManagementPage>
                   color: context.color.backgroundGreyColor,
                   borderRadius: BorderRadius.circular(12.r),
                 ),
-                child: Icon(iconData, color: context.color.primaryColor, size: 24.r),
+                child: Icon(iconData,
+                    color: context.color.primaryColor, size: 24.r),
               ),
               SizedBox(width: 16.w),
               Expanded(
@@ -255,7 +259,8 @@ class _CategoryManagementPageState extends State<CategoryManagementPage>
                 ),
               ),
               IconButton(
-                icon: Icon(Icons.delete_outline_rounded, color: context.color.backgroundWarningColor),
+                icon: Icon(Icons.delete_outline_rounded,
+                    color: context.color.backgroundWarningColor),
                 onPressed: () => _deleteCategory(cat['id'] as int),
               ),
             ],
@@ -274,7 +279,8 @@ class _CategoryManagementPageState extends State<CategoryManagementPage>
         elevation: 0,
         surfaceTintColor: Colors.transparent,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new_rounded, color: context.color.textPrimaryColor),
+          icon: Icon(Icons.arrow_back_ios_new_rounded,
+              color: context.color.textPrimaryColor),
           onPressed: () => context.pop(),
         ),
         title: Text(
@@ -290,7 +296,8 @@ class _CategoryManagementPageState extends State<CategoryManagementPage>
           indicatorColor: context.color.primaryColor,
           labelColor: context.color.primaryColor,
           unselectedLabelColor: context.color.textSecondaryColor,
-          labelStyle: context.text.blackTextStyle.copyWith(fontWeight: FontWeight.w600),
+          labelStyle:
+              context.text.blackTextStyle.copyWith(fontWeight: FontWeight.w600),
           tabs: const [
             Tab(text: 'Pemasukan'),
             Tab(text: 'Pengeluaran'),

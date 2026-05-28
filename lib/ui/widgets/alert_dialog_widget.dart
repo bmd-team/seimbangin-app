@@ -61,7 +61,7 @@ class AlertDialogWidget {
         });
       } catch (e2) {
         // Last resort
-        print('Error dismissing dialog: $e2');
+        debugPrint('Error dismissing dialog: $e2');
       }
     }
   }

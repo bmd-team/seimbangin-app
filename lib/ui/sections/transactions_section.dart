@@ -24,7 +24,8 @@ class AddTransactionIncomeSection extends StatelessWidget {
         SizedBox(height: 10.r),
         Text(
           amountTitle,
-          style: context.text.greyTextStyle.copyWith(fontSize: 14.sp, fontWeight: FontWeight.w500),
+          style: context.text.greyTextStyle
+              .copyWith(fontSize: 14.sp, fontWeight: FontWeight.w500),
         ),
         SizedBox(height: 8.r),
         TextField(
@@ -40,7 +41,7 @@ class AddTransactionIncomeSection extends StatelessWidget {
             ),
             prefixText: 'Rp ',
             prefixStyle: context.text.blackTextStyle.copyWith(
-              fontSize: 24.sp, 
+              fontSize: 24.sp,
               fontWeight: FontWeight.bold,
               color: context.color.primaryColor,
             ),
@@ -73,7 +74,8 @@ class AddTransactionIncomeSection extends StatelessWidget {
                 color: context.color.primaryColor,
               ),
             ),
-            prefixIcon: Icon(Icons.edit_note_rounded, color: context.color.textSecondaryColor),
+            prefixIcon: Icon(Icons.edit_note_rounded,
+                color: context.color.textSecondaryColor),
           ),
           style: context.text.blackTextStyle.copyWith(
             fontSize: 14.sp,
@@ -143,16 +145,21 @@ class _CategorySelectorState extends State<CategorySelector> {
                   width: 155.w,
                   height: 64.h,
                   decoration: BoxDecoration(
-                    color: isSelected ? context.color.primaryColor : context.color.backgroundWhiteColor,
+                    color: isSelected
+                        ? context.color.primaryColor
+                        : context.color.backgroundWhiteColor,
                     borderRadius: BorderRadius.circular(16).r,
                     border: Border.all(
-                      color: isSelected ? Colors.transparent : context.color.backgroundGreyColor,
+                      color: isSelected
+                          ? Colors.transparent
+                          : context.color.backgroundGreyColor,
                       width: 1.5.r,
                     ),
                     boxShadow: isSelected
                         ? [
                             BoxShadow(
-                              color: context.color.primaryColor.withOpacity(0.35),
+                              color: context.color.primaryColor
+                                  .withValues(alpha: 0.35),
                               blurRadius: 10,
                               offset: const Offset(0, 4),
                             )
@@ -172,13 +179,16 @@ class _CategorySelectorState extends State<CategorySelector> {
                               padding: EdgeInsets.all(10.r),
                               decoration: BoxDecoration(
                                 color: isSelected
-                                    ? Colors.black.withOpacity(0.15)
+                                    ? Colors.black.withValues(alpha: 0.15)
                                     : context.color.backgroundGreyColor,
                                 borderRadius: BorderRadius.circular(12).r,
                               ),
                               child: Icon(
-                                IconData(catIconCode, fontFamily: 'MaterialIcons'),
-                                color: isSelected ? Colors.white : context.color.textSecondaryColor,
+                                IconData(catIconCode,
+                                    fontFamily: 'MaterialIcons'),
+                                color: isSelected
+                                    ? Colors.white
+                                    : context.color.textSecondaryColor,
                                 size: 24.r,
                               ),
                             ),
@@ -191,7 +201,9 @@ class _CategorySelectorState extends State<CategorySelector> {
                                   fontSize: 13.sp,
                                   height: 1.2,
                                   fontWeight: FontWeight.w600,
-                                  color: isSelected ? Colors.white : context.color.textPrimaryColor,
+                                  color: isSelected
+                                      ? Colors.white
+                                      : context.color.textPrimaryColor,
                                 ),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
@@ -217,12 +229,12 @@ class _CategorySelectorState extends State<CategorySelector> {
                               ),
                             ),
                             child: Align(
-                              alignment: Alignment.center,
-                               child: CustomPaint(
-                                 painter: DashedCirclePainter(color: Colors.white),
-                                 child: const SizedBox.expand(),
-                               )
-                            ),
+                                alignment: Alignment.center,
+                                child: CustomPaint(
+                                  painter:
+                                      DashedCirclePainter(color: Colors.white),
+                                  child: const SizedBox.expand(),
+                                )),
                           ),
                         ),
                     ],
@@ -253,10 +265,11 @@ class DashedCirclePainter extends CustomPainter {
     const double dashLength = 3;
     const double gapLength = 3;
     final double perimeter = 2 * 3.141592653589793 * radius;
-    
+
     double startAngle = 0;
     while (startAngle < 2 * 3.141592653589793) {
-      final double sweepAngle = (dashLength / perimeter) * 2 * 3.141592653589793;
+      final double sweepAngle =
+          (dashLength / perimeter) * 2 * 3.141592653589793;
       canvas.drawArc(
         Rect.fromCircle(center: Offset(radius, radius), radius: radius),
         startAngle,
@@ -264,7 +277,8 @@ class DashedCirclePainter extends CustomPainter {
         false,
         paint,
       );
-      startAngle += sweepAngle + ((gapLength / perimeter) * 2 * 3.141592653589793);
+      startAngle +=
+          sweepAngle + ((gapLength / perimeter) * 2 * 3.141592653589793);
     }
   }
 

@@ -32,7 +32,7 @@ class AnalyticsBarChart extends StatelessWidget {
             horizontalInterval: maxY / 4,
             getDrawingHorizontalLine: (value) {
               return FlLine(
-                color: Colors.grey.withOpacity(0.3),
+                color: Colors.grey.withValues(alpha: 0.3),
                 strokeWidth: 1,
                 dashArray: [5, 5],
               );

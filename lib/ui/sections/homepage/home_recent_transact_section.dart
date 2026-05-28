@@ -43,6 +43,9 @@ class LastTransactionsSection extends StatelessWidget {
         return (context.color.buttonHousingColor, 'assets/ic_housing.png');
       case 'internet':
         return (context.color.buttonInternetColor, 'assets/ic_internet.png');
+      case 'lainnya':
+      case 'others':
+        return (context.color.backgroundGreyColor, 'assets/ic_bonus.png');
       default:
         // Fallback untuk kategori 'others' atau yang tidak dikenal
         return (context.color.buttonInternetColor, 'assets/ic_bonus.png');

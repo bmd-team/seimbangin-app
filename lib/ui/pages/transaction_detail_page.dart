@@ -124,7 +124,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                       color: context.color.backgroundWhiteColor,
                       boxShadow: [
                         BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
+                            color: Colors.black.withValues(alpha: 0.05),
                             blurRadius: 20,
                             spreadRadius: 5)
                       ],
@@ -216,8 +216,8 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                               horizontal: 16.r, vertical: 12.r),
                           decoration: BoxDecoration(
                               color: isOutcome
-                                  ? const Color(0xffE91E63).withOpacity(0.1)
-                                  : context.color.primaryColor.withOpacity(0.1),
+                                  ? const Color(0xffE91E63).withValues(alpha: 0.1)
+                                  : context.color.primaryColor.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(16).r),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -319,21 +319,26 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
   (Color, String) _getCategoryUIData(String category) {
     switch (category.toLowerCase()) {
       case 'salary':
+      case 'gaji':
         return (context.color.buttonSalaryColor, 'assets/ic_salary.png');
       case 'freelance':
         return (context.color.buttonFreelanceColor, 'assets/ic_freelance.png');
       case 'bonus':
+      case 'hadiah':
         return (context.color.buttonBonusColor, 'assets/ic_bonus.png');
       case 'gift':
         return (context.color.buttonBonusColor, 'assets/ic_gift.png');
       case 'parent':
         return (context.color.buttonParentColor, 'assets/ic_parents.png');
       case 'food':
+      case 'makan':
         return (context.color.buttonFoodColor, 'assets/ic_food.png');
       case 'transportation':
       case 'transport':
+      case 'transportasi':
         return (context.color.buttonTransportationColor, 'assets/ic_transportation.png');
       case 'shopping':
+      case 'belanja':
         return (context.color.buttonShoppingColor, 'assets/ic_shopping.png');
       case 'health':
         return (context.color.buttonHealthColor, 'assets/ic_health.png');
@@ -343,6 +348,9 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
         return (context.color.buttonHousingColor, 'assets/ic_housing.png');
       case 'internet':
         return (context.color.buttonInternetColor, 'assets/ic_internet.png');
+      case 'lainnya':
+      case 'others':
+        return (context.color.backgroundGreyColor, 'assets/ic_bonus.png');
       default:
         // Fallback untuk kategori 'others' atau yang tidak dikenal
         return (context.color.buttonInternetColor, 'assets/ic_bonus.png');

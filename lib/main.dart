@@ -1,38 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:seimbangin_app/blocs/chatbot/chatbot_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:seimbangin_app/blocs/analytics/analytics_bloc.dart';
 import 'package:seimbangin_app/blocs/homepage/homepage_bloc.dart';
-import 'package:seimbangin_app/blocs/ocr/ocr_bloc.dart';
-import 'package:seimbangin_app/blocs/statistics/statistics_bloc.dart';
 import 'package:seimbangin_app/blocs/transaction/transaction_bloc.dart';
 import 'package:seimbangin_app/routes/routes.dart';
-import 'package:seimbangin_app/services/chatbot_service.dart';
-import 'package:seimbangin_app/services/ocr_service.dart';
-import 'package:seimbangin_app/services/statistics_service.dart';
 import 'package:seimbangin_app/services/transaction/transaction_service.dart';
 import 'package:seimbangin_app/services/user_service.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:seimbangin_app/blocs/theme/theme_cubit.dart';
 import 'package:seimbangin_app/shared/theme/theme.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   await initializeDateFormatting('en_EN', null);
-  await dotenv.load(fileName: '.env');
-  SystemChrome.setPreferredOrientations(
+  await SystemChrome.setPreferredOrientations(
     [
       DeviceOrientation.portraitUp,
     ],
-  ).then((_) {
-    runApp(MyApp());
-  });
+  );
+
+  runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    FlutterNativeSplash.remove();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,15 +51,7 @@ class MyApp extends StatelessWidget {
           create: (context) =>
               TransactionBloc(transactionService: TransactionService()),
         ),
-        BlocProvider(
-          create: (context) => ChatbotBloc(chatbotService: ChatbotService()),
-        ),
-        BlocProvider(
-          create: (context) => OcrBloc(ocrService: OcrService()),
-        ),
-        BlocProvider(
-            create: (context) =>
-                StatisticsBloc(statisticsService: StatisticsService())),
+        BlocProvider(create: (context) => AnalyticsBloc()),
         BlocProvider(create: (context) => ThemeCubit()),
       ],
       child: ScreenUtilInit(

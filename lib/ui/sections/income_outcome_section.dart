@@ -7,12 +7,14 @@ class IncomeOutcomeSection extends StatefulWidget {
   final String balance;
   final String incomeAmount;
   final String outcomeAmount;
+  final VoidCallback? onAddTransaction;
 
   const IncomeOutcomeSection({
     super.key,
     required this.balance,
     required this.incomeAmount,
     required this.outcomeAmount,
+    this.onAddTransaction,
   });
 
   @override
@@ -59,29 +61,23 @@ class _IncomeOutcomeSectionState extends State<IncomeOutcomeSection> {
                 ),
               ),
               GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _isObscured = !_isObscured;
-                  });
-                },
+                onTap: widget.onAddTransaction,
                 child: Container(
                   padding: EdgeInsets.all(8.r),
                   decoration: BoxDecoration(
-                    color: context.color.backgroundWhiteColor,
+                    color: context.color.primaryColor,
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
+                        color: context.color.primaryColor.withValues(alpha: 0.3),
                         blurRadius: 10,
                         offset: const Offset(0, 2),
                       ),
                     ],
                   ),
                   child: Icon(
-                    _isObscured
-                        ? Icons.visibility_off_rounded
-                        : Icons.visibility_rounded,
-                    color: context.color.textSecondaryColor,
+                    Icons.add_rounded,
+                    color: Colors.white,
                     size: 20.sp,
                   ),
                 ),
@@ -95,17 +91,10 @@ class _IncomeOutcomeSectionState extends State<IncomeOutcomeSection> {
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24.r),
-              gradient: LinearGradient(
-                colors: [
-                  context.color.gradientBlueStartColor,
-                  context.color.gradientBlueEndColor,
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+              color: context.color.primaryColor,
               boxShadow: [
                 BoxShadow(
-                  color: context.color.gradientBlueStartColor.withValues(alpha: 0.3),
+                  color: context.color.primaryColor.withValues(alpha: 0.3),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
@@ -116,12 +105,38 @@ class _IncomeOutcomeSectionState extends State<IncomeOutcomeSection> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Total Saldo',
-                    style: context.text.whiteTextStyle.copyWith(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        'Total Saldo',
+                        style: context.text.whiteTextStyle.copyWith(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _isObscured = !_isObscured;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(6.r),
+                          decoration: BoxDecoration(
+                            color: context.color.backgroundWhiteColor.withValues(alpha: 0.2),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            _isObscured
+                                ? Icons.visibility_off_rounded
+                                : Icons.visibility_rounded,
+                            color: Colors.white,
+                            size: 16.sp,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(height: 8.h),
                   Text(

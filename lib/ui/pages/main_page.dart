@@ -3,10 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:seimbangin_app/blocs/homepage/homepage_bloc.dart';
-import 'package:seimbangin_app/routes/routes.dart';
 import 'package:seimbangin_app/shared/theme/theme.dart';
 import 'package:seimbangin_app/ui/pages/analytics_page.dart';
-import 'package:seimbangin_app/ui/pages/history_transact_page.dart';
 import 'package:seimbangin_app/ui/pages/home_page.dart';
 import 'package:seimbangin_app/ui/pages/profile_page.dart';
 
@@ -40,31 +38,7 @@ class _MainPageState extends State<MainPage> {
           screen: const AnalyticsPage(),
           item: ItemConfig(
             icon: Icon(Icons.bar_chart_rounded, size: 24.r),
-            title: "Chart",
-            textStyle: context.text.blackTextStyle
-                .copyWith(fontSize: 12.sp, fontWeight: FontWeight.w600),
-            activeForegroundColor: context.color.primaryColor,
-            inactiveForegroundColor:
-                context.color.textSecondaryColor.withValues(alpha: 0.5),
-          ),
-        ),
-        PersistentTabConfig.noScreen(
-          onPressed: (barContext) => routes.pushNamed(RouteNames.transaction),
-          item: ItemConfig(
-            icon: Icon(
-              Icons.add_rounded,
-              size: 32.r,
-              color: Colors.white,
-            ),
-            activeForegroundColor: context.color.primaryColor,
-            inactiveForegroundColor: context.color.primaryColor,
-          ),
-        ),
-        PersistentTabConfig(
-          screen: const HistoryTransactPage(),
-          item: ItemConfig(
-            icon: Icon(Icons.receipt_long_rounded, size: 24.r),
-            title: "Reports",
+            title: "Insight",
             textStyle: context.text.blackTextStyle
                 .copyWith(fontSize: 12.sp, fontWeight: FontWeight.w600),
             activeForegroundColor: context.color.primaryColor,
@@ -78,8 +52,8 @@ class _MainPageState extends State<MainPage> {
             child: const ProfilePage(),
           ),
           item: ItemConfig(
-            icon: Icon(Icons.person_rounded, size: 24.r),
-            title: "Settings",
+            icon: Icon(Icons.settings_rounded, size: 24.r),
+            title: "Setting",
             textStyle: context.text.blackTextStyle
                 .copyWith(fontSize: 12.sp, fontWeight: FontWeight.w600),
             activeForegroundColor: context.color.primaryColor,
@@ -96,7 +70,7 @@ class _MainPageState extends State<MainPage> {
       margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       backgroundColor: Colors.transparent,
       tabs: _tabs(context),
-      navBarBuilder: (navBarConfig) => Style15BottomNavBar(
+      navBarBuilder: (navBarConfig) => Style1BottomNavBar(
         navBarConfig: navBarConfig,
         navBarDecoration: NavBarDecoration(
           color: context.color.backgroundWhiteColor,

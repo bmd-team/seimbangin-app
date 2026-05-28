@@ -81,7 +81,7 @@ class TransactionCategorySection extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: categoryData.isEmpty
               ? StaticNoTransaction(
-                  onTap: () => print(
+                  onTap: () => debugPrint(
                     'You clicked add transaction on static no transact card!',
                   ),
                 )

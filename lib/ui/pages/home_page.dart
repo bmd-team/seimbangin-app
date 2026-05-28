@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:logger/logger.dart';
 import 'package:seimbangin_app/blocs/homepage/homepage_bloc.dart';
 import 'package:seimbangin_app/blocs/transaction/transaction_bloc.dart';
+import 'package:seimbangin_app/routes/routes.dart';
 import 'package:seimbangin_app/shared/theme/theme.dart';
 import 'package:seimbangin_app/ui/sections/homepage/home_page_skeleton.dart';
 import 'package:seimbangin_app/ui/sections/homepage/home_recent_transact_section.dart';
@@ -102,109 +103,12 @@ class _HomePageState extends State<HomePage>
                               '0',
                           outcomeAmount: user.data.financeProfile?.totalOutcome
                                   .toString() ??
-                              '0'),
+                              '0',
+                          onAddTransaction: () =>
+                              routes.pushNamed(RouteNames.transaction)),
                       LastTransactionsSection(),
                     ],
                   ),
-                  // child: RefreshIndicator(
-                  //   color: context.color.primaryColor,
-                  //   onRefresh: _onRefresh,
-                  //   child: CustomScrollView(
-                  //     physics: const AlwaysScrollableScrollPhysics(),
-                  //     slivers: [
-                  //       SliverAppBar(
-                  //         automaticallyImplyLeading: false,
-                  //         expandedHeight: 220.r,
-                  //         pinned: false,
-                  //         floating: false,
-                  //         backgroundColor: Colors.transparent,
-                  //         flexibleSpace: FlexibleSpaceBar(
-                  //           background: HeaderSection(
-                  //             name: user.data.username ?? "Guest",
-                  //             money: user.data.balance.toString() ?? '0',
-                  //             imageUrl: "assets/img_mascot-login.png",
-                  //           ),
-                  //         ),
-                  //       ),
-                  //       SliverToBoxAdapter(
-                  //         child: Container(
-                  //           decoration: BoxDecoration(
-                  //             color: context.color.backgroundWhiteColor,
-                  //             borderRadius: BorderRadius.only(
-                  //               topLeft: Radius.circular(32.r),
-                  //               topRight: Radius.circular(32.r),
-                  //             ),
-                  //           ),
-                  //           child: Padding(
-                  //             padding:
-                  //                 const EdgeInsets.symmetric(horizontal: 24).r,
-                  //             child: Column(
-                  //               crossAxisAlignment: CrossAxisAlignment.start,
-                  //               children: [
-                  //                 SizedBox(height: 24.r),
-                  //                 IncomeOutcomeSection(
-                  //                   incomeAmount: user
-                  //                           .data.financeProfile?.totalIncome
-                  //                           .toString() ??
-                  //                       '0',
-                  //                   outcomeAmount: user
-                  //                           .data.financeProfile?.totalOutcome
-                  //                           .toString() ??
-                  //                       '0',
-                  //                 ),
-                  //                 SizedBox(height: 20.r),
-                  //                 Text(
-                  //                   "AI Advisor",
-                  //                   style: context.text.blackTextStyle.copyWith(
-                  //                     fontWeight: FontWeight.bold,
-                  //                     fontSize: 20.sp,
-                  //                   ),
-                  //                 ),
-                  //                 SizedBox(height: 10.r),
-                  //                 if (homepageState.isAdviceLoading)
-                  //                   Container(
-                  //                     height: 100,
-                  //                     alignment: Alignment.center,
-                  //                     child: CircularProgressIndicator(
-                  //                         color: context.color.primaryColor),
-                  //                   )
-                  //                 else if (homepageState.adviceError != null)
-                  //                   Container(
-                  //                     height: 100,
-                  //                     alignment: Alignment.center,
-                  //                     child: Text(
-                  //                       homepageState.adviceError!,
-                  //                       style: context.text.greyTextStyle,
-                  //                     ),
-                  //                   )
-                  //                 else if (homepageState.advice != null)
-                  //                   AiAdvisorSection(
-                  //                     financialProfileButtonOntap: () =>
-                  //                         routes.pushNamed(
-                  //                             RouteNames.financialProfile),
-                  //                     advice: homepageState.advice!,
-                  //                     isAdviceExist: homepageState
-                  //                             .user.data.financeProfile !=
-                  //                         null,
-                  //                   )
-                  //                 else
-                  //                   Container(
-                  //                     height: 100,
-                  //                     alignment: Alignment.center,
-                  //                     child: const Text(
-                  //                         "Saran AI tidak tersedia saat ini."),
-                  //                   ),
-                  //                 SizedBox(height: 20.r),
-                  //                 const HomeRecentTransactionsSection(),
-                  //                 SizedBox(height: 100.r),
-                  //               ],
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
                 );
               }
 
@@ -218,7 +122,8 @@ class _HomePageState extends State<HomePage>
                         Text(
                           'Gagal memuat data: ${homepageState.error}',
                           textAlign: TextAlign.center,
-                          style: context.text.blackTextStyle.copyWith(fontSize: 16.sp),
+                          style: context.text.blackTextStyle
+                              .copyWith(fontSize: 16.sp),
                         ),
                         SizedBox(height: 20.h),
                         ElevatedButton(

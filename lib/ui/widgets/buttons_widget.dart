@@ -120,7 +120,7 @@ class ScanButton extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(boxShadow: [
         BoxShadow(
-            color: context.color.buttonColor.withOpacity(0.5),
+            color: context.color.buttonColor.withValues(alpha: 0.5),
             blurRadius: 20,
             spreadRadius: 2,
             offset: Offset(0, 4)),

@@ -5,12 +5,9 @@ import 'package:seimbangin_app/models/transaction/transaction_model.dart'
     as model;
 import 'package:seimbangin_app/ui/pages/analytics_page.dart';
 import 'package:seimbangin_app/ui/pages/category_management_page.dart';
-import 'package:seimbangin_app/ui/pages/chat_advisor_page.dart';
 import 'package:seimbangin_app/ui/pages/financial_profile_page.dart';
 import 'package:seimbangin_app/ui/pages/history_transact_page.dart';
 import 'package:seimbangin_app/ui/pages/home_page.dart';
-import 'package:seimbangin_app/ui/pages/ocr_page.dart';
-import 'package:seimbangin_app/ui/pages/ocr_preview_page.dart';
 import 'package:seimbangin_app/ui/pages/profile_edit_page.dart';
 import 'package:seimbangin_app/ui/pages/profile_page.dart';
 import 'package:seimbangin_app/ui/pages/transaction_detail_page.dart';
@@ -44,14 +41,12 @@ final routes = GoRouter(
           builder: (context, state) {
             final userData = state.extra as UserResponse?;
 
-            // Handle jika data tidak ada (sebagai pengaman)
             if (userData == null) {
               print("Error: UserData tidak ditemukan untuk ProfileEditPage.");
               return const Scaffold(
                 body: Center(child: Text("Error: User data not provided.")),
               );
             }
-            // Kirim userData ke ProfileEditPage
             return ProfileEditPage(userData: userData);
           },
         ),
@@ -68,23 +63,10 @@ final routes = GoRouter(
       builder: (context, state) => const HomePage(),
       routes: [
         GoRoute(
-          path: 'ocr',
-          name: RouteNames.ocr,
-          builder: (context, state) => const OcrPage(),
+          path: 'transaction',
+          name: RouteNames.transaction,
+          builder: (context, state) => const TransactionsPage(),
           routes: [
-            GoRoute(
-              path: 'ocr-preview',
-              name: RouteNames.ocrPreview,
-              builder: (context, state) {
-                final path = state.extra as String;
-                return OcrPreviewPage(path: path);
-              },
-            ),
-            GoRoute(
-              path: 'transaction',
-              name: RouteNames.transaction,
-              builder: (context, state) => const TransactionsPage(),
-            ),
             GoRoute(
               path: 'transactionDetail',
               name: RouteNames.transactionDetail,
@@ -106,11 +88,6 @@ final routes = GoRouter(
           ],
         ),
       ],
-    ),
-    GoRoute(
-      path: '/chat-advisor',
-      name: RouteNames.chatAdvisor,
-      builder: (context, state) => const ChatAdvisorPage(),
     ),
     GoRoute(
       path: '/financialProfile',

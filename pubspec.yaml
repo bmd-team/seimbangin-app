@@ -38,6 +38,7 @@ dependencies:
   flutter_animate: ^4.5.2
   flutter_bloc: ^9.1.0
   flutter_launcher_icons: ^0.14.3
+  flutter_native_splash: ^2.4.7
   flutter_screenutil: ^5.9.3
   flutter_svg: ^2.3.0
   freezed_annotation: ^3.1.0
@@ -100,3 +101,11 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+flutter_native_splash:
+  color: "#1976D2"
+  image: assets/splash.png
+
+  android_12:
+    color: "#1976D2"
+    image: assets/splash-android12.png
